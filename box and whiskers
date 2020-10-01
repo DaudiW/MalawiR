@@ -1,0 +1,101 @@
+rm(list = ls())
+graphics.off()
+
+
+# d = has age data
+d<-read.csv("~/RData/Malawi/Last600_Eco2.csv")
+
+
+###Equivilate data###
+Eco2<-d[which(d$age < 70),]
+Eco2Max<-max(Eco2$lake)
+Eco2Min<-min(Eco2$lake)
+
+pol1<-d[which(d$age > 85 & d$lake < Eco2Max & d$lake > Eco2Min),]
+pol2<-d[which(d$age < 85 & d$age > 70),]
+pol3<-d[which(d$age < 70),]
+
+###Create boxplots
+boxplot(pol1$char, pol2$char, pol3$char,
+  at = c(1,2,3),
+  ylim = c(0, 300),
+  las = 2,
+  col = c("blue", "red", "yellow"),
+  border = "black",
+  horizontal = FALSE,
+  notch = FALSE,
+  frame.plot=FALSE
+)
+
+boxplot(pol1$Poa, pol2$Poa,pol3$Poa,
+        at = c(1,2,3),
+        las = 2,
+        col = c("blue", "red", "yellow"),
+        border = "black",
+        horizontal = FALSE,
+        notch = FALSE,
+        frame.plot=FALSE
+)
+
+boxplot(pol1$Podo, pol2$Podo,pol3$Podo,
+        at = c(1,2,3),
+        las = 2,
+        col = c("blue", "red", "yellow"),
+        border = "black",
+        horizontal = FALSE,
+        notch = FALSE,
+        frame.plot=FALSE
+)
+
+boxplot(pol1$Miombo, pol2$Miombo,pol3$Miombo,
+        at = c(1,2,3),
+        las = 2,
+        col = c("blue", "red", "yellow"),
+        border = "black",
+        horizontal = FALSE,
+        notch = FALSE,
+        frame.plot=FALSE
+)
+
+boxplot(pol1$Olea, pol2$Olea,pol3$Olea,
+        at = c(1,2,3),
+        las = 2,
+        col = c("blue", "red", "yellow"),
+        border = "black",
+        horizontal = FALSE,
+        notch = FALSE,
+        frame.plot=FALSE
+)
+
+boxplot(pol1$rich, pol2$rich,pol3$rich,
+        at = c(1,2,3),
+        las = 2,
+        col = c("blue", "red","yellow"),
+        border = "black",
+        horizontal = FALSE,
+        notch = FALSE,
+        frame.plot=FALSE
+)
+
+boxplot(pol1$lake, pol2$lake,
+        at = c(1,2),
+        las = 2,
+        col = c("blue", "red"),
+        border = "black",
+        horizontal = FALSE,
+        notch = FALSE,
+        frame.plot=FALSE
+)
+
+boxplot(pol1$Asters, pol2$Asters,
+        at = c(1,2),
+        las = 2,
+        ylim = c(0, 4),
+        col = c("blue", "red"),
+        border = "black",
+        horizontal = FALSE,
+        notch = FALSE,
+        frame.plot=FALSE, 
+        yaxt = "n")
+axis(2, at = seq(0, 3, 1), las = 2)
+
