@@ -1,0 +1,19 @@
+
+library(ggplot2)
+
+d<-read.csv("~/RData/Malawi/Last600_Eco2.csv")
+
+ggplot(d, aes(lake, rich, colour = Age)) + scale_color_manual(values=c("yellow", "blue", "red")) + 
+  theme (axis.title.x=element_blank(), axis.title.y=element_blank()) +
+  geom_point() + stat_ellipse(
+  mapping = NULL,
+  data = NULL,
+  geom = "path",
+  position = "identity",
+  type = "t",
+  level = 0.95,
+  segments = 51,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
+)
