@@ -1,0 +1,15 @@
+rm(list=ls()) 
+graphics.off()
+
+
+library(kde1d)
+
+Chitimwe <- read.csv("~/RData/Malawi/KDE/KarongaKDE.csv", header = TRUE)
+
+merged.df <- Chitimwe[c(2, 3)]
+
+Chit.Norm <- rnorm(72000, merged.df$Age, merged.df$Error) 
+
+fit <- kde1d(Chit.Norm)
+
+plot(fit)
