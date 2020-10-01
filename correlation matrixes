@@ -1,0 +1,110 @@
+rm(list = ls())
+graphics.off()
+
+library('corrplot')
+
+
+# d = has age data
+d<-read.csv("~/RData/Malawi/Last600_Eco2.csv")
+
+##normalize data##
+normalize <- function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+d$lake_norm<-normalize(d$lake)
+d$char_norm<-normalize(d$char)
+d$rich_norm<-normalize(d$rich)
+d$Poa_norm<-normalize(d$Poa)
+d$Podo_norm<-normalize(d$Podo)
+d$Miombo_norm<-normalize(d$Miombo)
+d$Olea_norm<-normalize(d$Olea)
+
+###Simple Correlation Matrices###
+Eco1<-d[which(d$age > 85),]
+Eco2<-d[which(d$age < 85),]
+
+###Older than 85ka###
+d1<-data.frame(Eco1$lake_norm,
+               Eco1$char_norm,
+               Eco1$rich_norm,
+               Eco1$Poa_norm,
+               Eco1$Podo_norm,
+               Eco1$Miombo_norm,
+               Eco1$Olea_norm)
+
+M1 <- cor(d1) # get correlations
+
+corrplot.mixed(M1, lower.col = "black", tl.pos = "n") #plot matrix
+
+###Older than 85ka non-normalized###
+d10<-data.frame(Eco1$lake,
+               Eco1$char,
+               Eco1$rich,
+               Eco1$Poa,
+               Eco1$Podo,
+               Eco1$Miombo,
+               Eco1$Olea)
+
+M1 <- cor(d10) # get correlations
+
+corrplot.mixed(M1, lower.col = "black", tl.pos = "n") #plot matrix
+
+####Younger than 85ka####
+
+d2<-data.frame(Eco2$lake_norm,
+               Eco2$char_norm,
+               Eco2$rich_norm,
+               Eco2$Poa_norm,
+               Eco2$Podo_norm,
+               Eco2$Miombo_norm,
+               Eco2$Olea_norm)
+
+M2 <- cor(d2) # get correlations
+
+
+corrplot.mixed(M2, lower.col = "black", order = "AOE", tl.pos = "n") #plot matrix
+
+###Calibrated Correlation Matrices###
+print(Eco2$lake_norm)
+Eco2Max<-max(Eco2$lake_norm)
+Eco2Min<-min(Eco2$lake_norm)
+
+Eco3<-d[which(d$age > 85 & d$lake_norm > Eco2Min & d$lake_norm < Eco2Max),]
+
+
+###Calibrated Older than 85ka###
+d3<-data.frame(Eco3$lake_norm,
+               Eco3$char_norm,
+               Eco3$rich_norm,
+               Eco3$Poa_norm,
+               Eco3$Podo_norm,
+               Eco3$Miombo_norm,
+               Eco3$Olea_norm)
+
+M3 <- cor(d3) # get correlations
+
+corrplot.mixed(M3, lower.col = "black", tl.pos = "n") #plot matrix
+
+#Regression
+library(car)
+y70ka1 <- lm(Eco2$charnorm ~ Eco2$lakenorm)
+summary(y70ka1)
+y70ka2 <- lm(Eco2$richnorm ~ Eco2$lakenorm)
+summary(y70ka2)
+cor(Eco2$charnorm, Eco2$lakenorm)
+cor(Eco2$richnorm, Eco2$lakenorm)
+Anova(y70ka)
+
+o85ka1 <- lm(Eco1$charnorm ~ Eco1$lakenorm)
+summary(o85ka1)
+o85ka2 <- lm(Eco1$charnorm ~ Eco1$lakenorm)
+summary(o85ka2)
+cor(Eco1$charnorm, Eco1$lakenorm)
+cor(Eco1$richnorm, Eco1$lakenorm)
+Anova(o85ka)
+
+o85ka3 <- lm(Eco3$charnorm ~ Eco3$lakenorm)
+summary(o85ka3)
+
+#t.tests
+t.test(d2$Eco2.richnorm,d3$Eco3.richnorm)
